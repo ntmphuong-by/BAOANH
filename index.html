@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Học Cùng Cô Phượng - K12</title>
+    <style>
+        :root {
+            --primary-pink: #ffafcc;
+            --soft-blue: #a2d2ff;
+            --soft-purple: #cdb4db;
+            --success-green: #2ecc71;
+            --danger-red: #e74c3c;
+            --text-dark: #5a5a5a;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #fdf0f6;
+            margin: 0; padding-bottom: 50px;
+        }
+
+        /* PROFILE CARD */
+        header { background: linear-gradient(135deg, var(--primary-pink), var(--soft-purple)); padding: 40px 0; text-align: center; color: white; }
+        
+        .profile-card {
+            background: white; border-radius: 25px; padding: 25px;
+            max-width: 850px; margin: -40px auto 20px;
+            display: flex; align-items: center; gap: 30px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05); border: 2px solid var(--soft-blue);
+        }
+
+        .avatar-box {
+            width: 130px; height: 130px; border-radius: 50%;
+            border: 4px solid var(--primary-pink); overflow: hidden;
+            background: #fff5f8; flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+        }
+        #myAvatar { width: 100%; height: 100%; object-fit: cover; display: none; }
+        .avatar-text { color: var(--primary-pink); font-size: 14px; text-align: center; font-weight: bold; }
+
+        /* GIAO DIỆN CHÍNH */
+        .container { max-width: 1000px; width: 95%; margin: auto; }
+        .box { background: white; border-radius: 20px; padding: 20px; margin-bottom: 20px; border: 1px solid #fce4ec; box-shadow: 0 5px 15px rgba(0,0,0,0.02); }
+        .btn-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 12px; }
+        
+        .cute-btn {
+            background: white; border: 2px solid var(--soft-blue); color: var(--soft-blue);
+            padding: 12px; border-radius: 15px; cursor: pointer; font-weight: bold; transition: 0.3s;
+        }
+        .cute-btn.active { background: var(--soft-blue); color: white; transform: translateY(-3px); }
+
+        /* BẢNG ĐIỀU KHIỂN GIẢNG VIÊN (LUÔN HIỆN) */
+        .admin-panel {
+            background: #fff9db; border: 2px dashed #ffec99; padding: 20px;
+            border-radius: 20px; margin-bottom: 25px;
+        }
+        .admin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+        /* HIỂN THỊ NỘI DUNG */
+        .main-grid { display: none; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .card { background: white; border-radius: 20px; padding: 20px; border: 2px solid var(--soft-purple); min-height: 200px; }
+        .card h3 { border-bottom: 2px solid var(--soft-purple); padding-bottom: 10px; color: var(--text-dark); }
+        
+        .list-item {
+            background: #fff; padding: 15px; border-radius: 15px; margin-top: 15px;
+            border: 1px solid #eee; display: flex; flex-direction: column; gap: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+        }
+        .item-header { display: flex; justify-content: space-between; align-items: center; }
+        
+        video, iframe { width: 100%; border-radius: 15px; min-height: 250px; border: none; background: #000; }
+
+        /* NÚT BẤM */
+        .btn-main { background: var(--primary-pink); color: white; border: none; padding: 12px 20px; border-radius: 12px; cursor: pointer; font-weight: bold; }
+        .btn-sm { padding: 8px 15px; border-radius: 8px; font-size: 13px; font-weight: bold; cursor: pointer; border: none; color: white; text-decoration: none; }
+        .btn-blue { background: var(--soft-blue); }
+        .btn-green { background: var(--success-green); }
+        .btn-red { background: var(--danger-red); }
+
+        input { padding: 12px; border-radius: 10px; border: 1px solid #ddd; margin: 5px 0; width: 95%; }
+
+        @media (max-width: 768px) { .admin-grid, .main-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+<header><h1>🌸 HỌC CÙNG CÔ PHƯỢNG 🌸</h1></header>
+
+<div class="container">
+    <div class="profile-card">
+        <div class="avatar-box">
+            <div id="avPlaceholder" class="avatar-text">Chưa có ảnh</div>
+            <img id="myAvatar" src="" alt="Cô Phượng">
+        </div>
+        <div>
+            <h2 style="color:var(--primary-pink); margin:0;">ThS. Nguyễn Thị Mỹ Phượng</h2>
+            <p>🏫 <b>Công tác:</b> Trường Đại học Bạc Liêu</p>
+            <p>📍 <b>Địa chỉ:</b> Trung tâm Bảo Anh, Phường Bạc Liêu</p>
+            <p>📞 <b>SĐT:</b> 0888.138.119</p>
+            <label style="color:var(--soft-blue); cursor:pointer; text-decoration:underline; font-size:12px;">
+                Thay đổi ảnh đại diện <input type="file" style="display:none" onchange="updateAvatar(this)">
+            </label>
+        </div>
+    </div>
+
+    <div class="admin-panel">
+        <strong style="font-size: 18px; color: #d4a017;">⚙️ Bảng Điều Khiển Giảng Viên</strong>
+        <p style="font-size: 13px; color: #888;">(Hãy chọn Lớp và Môn bên dưới trước khi tải bài giảng)</p>
+        <div class="admin-grid" style="margin-top: 15px;">
+            <div>
+                <label><b>1. Tải lên File:</b></label>
+                <input type="file" id="fileInput" multiple>
+                <button class="btn-main" onclick="saveFiles()" style="width:100%; margin-top:10px;">Thêm Vào Bài Giảng</button>
+            </div>
+            <div>
+                <label><b>2. Nhúng Link Bài Tập/Video:</b></label>
+                <input type="text" id="linkName" placeholder="Tên tiêu đề bài tập">
+                <input type="text" id="linkURL" placeholder="Dán link (URL) vào đây">
+                <button class="btn-main" onclick="saveLinks()" style="width:100%; margin-top:10px; background:var(--success-green);">Cập Nhật Liên Kết</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="box">
+        <b>⭐ Bước 1: Chọn Khối Lớp:</b>
+        <div class="btn-grid" id="classGrid" style="margin-top:12px;"></div>
+    </div>
+
+    <div id="subjectBox" class="box" style="display:none">
+        <b>📚 Bước 2: Chọn Môn Học:</b>
+        <div class="btn-grid" id="subjectGrid" style="margin-top:12px;"></div>
+    </div>
+
+    <div class="main-grid" id="mainDisplay">
+        <div class="card">
+            <h3>📂 Bài Giảng & Tài Liệu</h3>
+            <div id="fileList"></div>
+        </div>
+        <div class="card">
+            <h3>🎬 Mục Tự Học & Video</h3>
+            <div id="linkList"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let eduStorage = {}; 
+    let selectedC = null, selectedS = null;
+
+    window.onload = function() {
+        const savedImg = localStorage.getItem('teacherPic');
+        if(savedImg) showAvatar(savedImg);
+        initClassButtons();
+    };
+
+    function updateAvatar(input) {
+        if(input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                localStorage.setItem('teacherPic', e.target.result);
+                showAvatar(e.target.result);
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    function showAvatar(src) {
+        const img = document.getElementById('myAvatar');
+        img.src = src; img.style.display = 'block';
+        document.getElementById('avPlaceholder').style.display = 'none';
+    }
+
+    function initClassButtons() {
+        const grid = document.getElementById('classGrid');
+        for(let i=1; i<=12; i++) {
+            const btn = document.createElement('button');
+            btn.className = 'cute-btn'; btn.innerText = 'Lớp ' + i;
+            btn.onclick = () => {
+                selectedC = i; selectedS = null;
+                document.querySelectorAll('#classGrid .cute-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                document.getElementById('subjectBox').style.display = 'block';
+                document.getElementById('mainDisplay').style.display = 'none';
+                renderSubjectButtons();
+            };
+            grid.appendChild(btn);
+        }
+    }
+
+    function renderSubjectButtons() {
+        const grid = document.getElementById('subjectGrid');
+        const list = selectedC <= 5 ? ["Toán", "Tiếng Việt", "Tiếng Anh"] : ["Toán", "Ngữ Văn", "Tiếng Anh", "Vật Lý", "Hóa Học"];
+        grid.innerHTML = "";
+        list.forEach(s => {
+            const btn = document.createElement('button');
+            btn.className = 'cute-btn'; btn.innerText = s;
+            btn.onclick = () => {
+                selectedS = s;
+                document.querySelectorAll('#subjectGrid .cute-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                loadEducationalContent();
+            };
+            grid.appendChild(btn);
+        });
+    }
+
+    function loadEducationalContent() {
+        const key = `${selectedC}-${selectedS}`;
+        if(!eduStorage[key]) eduStorage[key] = { files: [], links: [] };
+        document.getElementById('mainDisplay').style.display = 'grid';
+        renderItems();
+    }
+
+    function saveFiles() {
+        if(!selectedS) return alert("Vui lòng chọn Lớp và Môn trước!");
+        const input = document.getElementById('fileInput');
+        const key = `${selectedC}-${selectedS}`;
+        for(let f of input.files) {
+            eduStorage[key].files.push({ name: f.name, url: URL.createObjectURL(f), type: f.type });
+        }
+        input.value = ""; renderItems();
+    }
+
+    function saveLinks() {
+        if(!selectedS) return alert("Vui lòng chọn Lớp và Môn trước!");
+        const name = document.getElementById('linkName').value;
+        const url = document.getElementById('linkURL').value;
+        if(name && url) {
+            eduStorage[key = `${selectedC}-${selectedS}`].links.push({ name, url });
+            document.getElementById('linkName').value = "";
+            document.getElementById('linkURL').value = "";
+            renderItems();
+        }
+    }
+
+    function renderItems() {
+        const key = `${selectedC}-${selectedS}`;
+        const data = eduStorage[key];
+
+        // Render File
+        document.getElementById('fileList').innerHTML = data.files.map((f, i) => `
+            <div class="list-item">
+                <div class="item-header"><b>📄 ${f.name}</b></div>
+                ${f.type.includes('video') ? `<video controls src="${f.url}"></video>` : f.type.includes('pdf') ? `<iframe src="${f.url}"></iframe>` : ''}
+                <div style="display:flex; gap:10px; margin-top:5px;">
+                    <a href="${f.url}" download="${f.name}" class="btn-sm btn-blue">Tải về</a>
+                    <button onclick="deleteItem('files', ${i})" class="btn-sm btn-red">Xóa</button>
+                </div>
+            </div>
+        `).join('') || "Chưa có tài liệu.";
+
+        // Render Link
+        document.getElementById('linkList').innerHTML = data.links.map((l, i) => {
+            const yt = l.url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&]+)/);
+            return `
+            <div class="list-item">
+                <div class="item-header"><b>🔗 ${l.name}</b></div>
+                ${yt ? `<iframe src="https://www.youtube.com/embed/${yt[1]}"></iframe>` : ''}
+                <div style="display:flex; gap:10px; margin-top:5px;">
+                    <a href="${l.url}" target="_blank" class="btn-sm btn-green">Mở Link</a>
+                    <button onclick="deleteItem('links', ${i})" class="btn-sm btn-red">Xóa</button>
+                </div>
+            </div>`;
+        }).join('') || "Chưa có bài tập.";
+    }
+
+    function deleteItem(type, index) {
+        eduStorage[`${selectedC}-${selectedS}`][type].splice(index, 1);
+        renderItems();
+    }
+</script>
+</body>
+</html>
